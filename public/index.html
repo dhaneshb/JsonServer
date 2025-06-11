@@ -1,0 +1,1427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PILLAR Domain Discovery Quest</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(45deg, #ff6b6b, #ffa726);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+        
+        .progress-section {
+            background: #f8f9ff;
+            padding: 20px 30px;
+            border-bottom: 1px solid #e0e8ff;
+        }
+        
+        .progress-bar {
+            background: #e0e8ff;
+            height: 20px;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 15px;
+        }
+        
+        .progress-fill {
+            background: linear-gradient(45deg, #4ecdc4, #44a08d);
+            height: 100%;
+            transition: width 0.3s ease;
+            border-radius: 10px;
+        }
+        
+        .stats {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .stat {
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .stat-label {
+            color: #666;
+            font-size: 0.9em;
+        }
+        
+        .quest-content {
+            padding: 40px;
+        }
+        
+        .question-card {
+            background: #f8f9ff;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            border-left: 5px solid #667eea;
+        }
+        
+        .question-title {
+            font-size: 1.5em;
+            color: #333;
+            margin-bottom: 15px;
+        }
+        
+        .question-subtitle {
+            color: #666;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+        
+        .input-group {
+            margin-bottom: 20px;
+        }
+        
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .input-group input, .input-group select, .input-group textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e8ff;
+            border-radius: 10px;
+            font-size: 1em;
+            transition: border-color 0.3s ease;
+        }
+        
+        .input-group input:focus, .input-group select:focus, .input-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .checkbox-group {
+            display: flex;
+            flex-direction: column;
+            margin-top: 16px;
+            margin-bottom: 8px;
+        }
+        
+        .checkbox-item {
+            display: flex;
+            align-items: flex-start;
+            background: white;
+            padding: 18px 24px;
+            margin: 12px 0;
+            border-radius: 15px;
+            border: 2px solid #e0e8ff;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-height: 60px;
+        }
+        
+        .checkbox-item:hover {
+            border-color: #667eea;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15);
+        }
+        
+        .checkbox-item.selected {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+        
+        .checkbox-item input {
+            margin-right: 16px;
+            margin-top: 4px;
+            flex-shrink: 0;
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+        
+        .checkbox-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            min-height: 40px;
+        }
+        
+        .checkbox-title {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 6px;
+            font-size: 1em;
+            line-height: 1.2;
+        }
+        
+        .checkbox-description {
+            font-size: 0.88em;
+            color: #666;
+            line-height: 1.4;
+            margin: 0;
+        }
+        
+        .checkbox-item.selected .checkbox-title {
+            color: white;
+        }
+        
+        .checkbox-item.selected .checkbox-description {
+            color: rgba(255, 255, 255, 0.9);
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 30px;
+        }
+        
+        .btn {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+        
+        .btn-secondary {
+            background: #f1f3f4;
+            color: #333;
+        }
+        
+        .btn-secondary:hover {
+            background: #e8eaed;
+        }
+        
+        .entity-list {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+        
+        .entity-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            border-bottom: 1px solid #e0e8ff;
+        }
+        
+        .entity-item:last-child {
+            border-bottom: none;
+        }
+        
+        .entity-name {
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .entity-properties {
+            color: #666;
+            font-size: 0.9em;
+        }
+        
+        .badge {
+            background: #4ecdc4;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.8em;
+            font-weight: 600;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .celebration {
+            text-align: center;
+            padding: 40px;
+        }
+        
+        .celebration h2 {
+            color: #4ecdc4;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+        }
+        
+        .achievement {
+            background: linear-gradient(45deg, #ffa726, #ff6b6b);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+        }
+        
+        .json-output {
+            background: #1e1e1e;
+            color: #f8f8f2;
+            padding: 20px;
+            border-radius: 10px;
+            font-family: monospace;
+            font-size: 0.9em;
+            overflow-x: auto;
+            margin-top: 20px;
+        }
+        
+        .result-summary {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        
+        .result-summary ul {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+        
+        .result-summary li {
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+        
+        .info-box {
+            background: #e3f2fd;
+            border: 1px solid #90caf9;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+        
+        .info-box p {
+            margin: 0;
+            color: #1565c0;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎮 PILLAR Domain Discovery Quest</h1>
+            <p>Help us understand your business entities to build the perfect relocation platform!</p>
+        </div>
+        
+        <div class="progress-section">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+            </div>
+            <div class="stats">
+                <div class="stat">
+                    <div class="stat-value" id="currentStep">1</div>
+                    <div class="stat-label">Current Quest</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value" id="entitiesCount">0</div>
+                    <div class="stat-label">Entities Discovered</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value" id="propertiesCount">0</div>
+                    <div class="stat-label">Properties Mapped</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value" id="xpPoints">0</div>
+                    <div class="stat-label">XP Points</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="quest-content">
+            <!-- Step 1: Introduction -->
+            <div class="quest-step" id="step1">
+                <div class="question-card">
+                    <h2 class="question-title">🚀 Welcome to the Domain Discovery Quest!</h2>
+                    <p class="question-subtitle">
+                        We're going to explore your relocation business together! Think of this as a treasure hunt where each piece of information you share helps us build a better system for you.
+                    </p>
+                    <div class="input-group">
+                        <label for="businessName">What's your company/organization name?</label>
+                        <input type="text" id="businessName" placeholder="e.g., RelocCompany Denmark">
+                    </div>
+                    <div class="input-group">
+                        <label for="businessType">What type of relocation services do you provide?</label>
+                        <select id="businessType">
+                            <option value="">Select one...</option>
+                            <option value="destination_agent">Destination Agent (help people relocate TO your country)</option>
+                            <option value="origin_agent">Origin Agent (help people relocate FROM your country)</option>
+                            <option value="global_mobility">Global Mobility Company (full service)</option>
+                            <option value="corporate_hr">Corporate HR (manage employee relocations)</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label>How do you currently manage your relocation processes?</label>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item" onclick="toggleCurrentProcess(this, 'manual_email')">
+                                <input type="checkbox" id="manual_email"> 
+                                <div class="checkbox-content">
+                                    <div class="checkbox-title">Email & Manual Tracking</div>
+                                    <div class="checkbox-description">Email chains, Excel spreadsheets, manual follow-ups</div>
+                                </div>
+                            </div>
+                            <div class="checkbox-item" onclick="toggleCurrentProcess(this, 'office365')">
+                                <input type="checkbox" id="office365"> 
+                                <div class="checkbox-content">
+                                    <div class="checkbox-title">Microsoft 365 Tools</div>
+                                    <div class="checkbox-description">Teams, SharePoint, Outlook, Word/Excel for tracking</div>
+                                </div>
+                            </div>
+                            <div class="checkbox-item" onclick="toggleCurrentProcess(this, 'google_workspace')">
+                                <input type="checkbox" id="google_workspace"> 
+                                <div class="checkbox-content">
+                                    <div class="checkbox-title">Google Workspace</div>
+                                    <div class="checkbox-description">Gmail, Drive, Sheets, Docs for case management</div>
+                                </div>
+                            </div>
+                            <div class="checkbox-item" onclick="toggleCurrentProcess(this, 'crm_system')">
+                                <input type="checkbox" id="crm_system"> 
+                                <div class="checkbox-content">
+                                    <div class="checkbox-title">CRM System</div>
+                                    <div class="checkbox-description">Salesforce, HubSpot, or similar for client management</div>
+                                </div>
+                            </div>
+                            <div class="checkbox-item" onclick="toggleCurrentProcess(this, 'existing_rmc_software')">
+                                <input type="checkbox" id="existing_rmc_software"> 
+                                <div class="checkbox-content">
+                                    <div class="checkbox-title">Existing Relocation Software</div>
+                                    <div class="checkbox-description">Already using specialized relocation management platform</div>
+                                </div>
+                            </div>
+                            <div class="checkbox-item" onclick="toggleCurrentProcess(this, 'paper_based')">
+                                <input type="checkbox" id="paper_based"> 
+                                <div class="checkbox-content">
+                                    <div class="checkbox-title">Paper-Based Process</div>
+                                    <div class="checkbox-description">Physical files, printed forms, manual documentation</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="button-group">
+                    <button class="btn btn-primary" onclick="nextStep()">Continue! 🎯</button>
+                </div>
+            </div>
+            
+            <!-- Step 2: Pain Points & Goals -->
+            <div class="quest-step hidden" id="step2">
+                <div class="question-card">
+                    <h2 class="question-title">💡 Quest 1: Current Challenges & Goals</h2>
+                    <p class="question-subtitle" id="step2Subtitle">
+                        Let's understand what's working and what could be improved in your current process.
+                    </p>
+                    <div class="input-group">
+                        <label>What are your biggest challenges with your current process? (Select all that apply)</label>
+                        <div class="checkbox-group" id="painPointsCheckboxes">
+                            <!-- Will be populated dynamically based on current process -->
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <label>What would you most like to improve or automate? (Select all that apply)</label>
+                        <div class="checkbox-group" id="improvementGoalsCheckboxes">
+                            <!-- Will be populated dynamically -->
+                        </div>
+                    </div>
+                </div>
+                <div class="button-group">
+                    <button class="btn btn-secondary" onclick="previousStep()">← Back</button>
+                    <button class="btn btn-primary" onclick="nextStep()">Continue Quest 🎯</button>
+                </div>
+            </div>
+            
+            <!-- Step 3: Entity Discovery -->
+            <div class="quest-step hidden" id="step3">
+                <div class="question-card">
+                    <h2 class="question-title">🎯 Quest 2: Discover Your Main Entities</h2>
+                    <p class="question-subtitle">
+                        Let's identify the main "things" your business manages. These are like the main characters in your relocation story!
+                    </p>
+                    <div class="input-group">
+                        <label><strong>👥 People & Organizations:</strong> Who do you track information about?</label>
+                        <div class="checkbox-group" id="entityCheckboxes">
+                            <div class="checkbox-item" onclick="toggleCheckbox(this, 'employers')">
+                                <input type="checkbox" id="employers"> 
+                                <div class="checkbox-content">
+                                    <div class="checkbox-title">Employers/Companies</div>
+                                    <div class="checkbox-description">Organizations ordering relocations - company info, HR contacts, contracts, budgets, preferred services</div>
+                                </div>
+                            </div>
+                            <div class="checkbox-item" onclick="toggleCheckbox(this, 'employees')">
+                                <input type="checkbox" id="employees"> 
+                                <div class="checkbox-content">
+                                    <div class="checkbox-title">Employees (Relocating)</div>
+                                    <div class="checkbox-description">People being relocated - personal details, visa status, family info, preferences, medical conditions</div>
+                                </div>
+                            </div>
+                            <div class="checkbox-item" onclick="toggleCheckbox(this, 'family_members')">
+                                <input type="checkbox" id="family_members"> 
+                                <div class="checkbox-content">
+                                    <div class="checkbox-title">Family Members</div>
+                                    <div class="checkbox-description">Dependents relocating with employee - relationship, age, visa needs, school requirements, special needs</div>
+                                </div>
+                            </div>
+                            <div class="checkbox-item" onclick="toggleCheckbox(this, 'vendors')">
+                                <input type="checkbox" id="vendors"> 
+                                <div class="checkbox-content">
+                                    <div class="checkbox-title">Vendors/Service Providers</div>
+                                    <div class="checkbox-description">External partners - housing providers, lawyers, banks, schools, utility companies, ratings, contracts</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label><strong>📋 Core Management:</strong> What do you track and manage?</label>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item" onclick="toggleCheckbox(this, 'cases')">
+                                <input type="checkbox" id="cases"> 
+                                <div class="checkbox-content">
+                                    <div class="checkbox-title">Relocation Cases</div>
+                                    <div class="checkbox-description">Individual relocation projects - status, timeline, budget, agent assignment, progress tracking</div>
+                                </div>
+                            </div>
+                            <div class="checkbox-item" onclick="toggleCheckbox(this, 'companies')">
+                                <input type="checkbox" id="companies"> 
+                                <div class="checkbox-content">
+                                    <div class="checkbox-title">Client Companies</div>
+                                    <div class="checkbox-description">Your business clients - contracts, service levels, account managers, billing information</div>
+                                </div>
+                            </div>
+                            <div class="checkbox-item" onclick="toggleCheckbox(this, 'packages')">
+                                <input type="checkbox" id="packages"> 
+                                <div class="checkbox-content">
+                                    <div class="checkbox-title">Service Packages</div>
+                                    <div class="checkbox-description">Different service tiers - pricing, included services, customization options, restrictions</div>
+                                </div>
+                            </div>
+                            <div class="checkbox-item" onclick="toggleCheckbox(this, 'tasks')">
+                                <input type="checkbox" id="tasks"> 
+                                <div class="checkbox-content">
+                                    <div class="checkbox-title">Tasks & Workflows</div>
+                                    <div class="checkbox-description">Process steps - checklists, dependencies, assignments, deadlines, completion tracking</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label><strong>🏠 Housing & Accommodation Services:</strong></label>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item" onclick="toggleCheckbox(this, 'accommodations')">
+                                <input type="checkbox" id="accommodations"> 
+                                <div class="checkbox-content">
+                                    <div class="checkbox-title">Housing/Accommodations</div>
+                                    <div class="checkbox-description">Properties, rentals, temporary housing - detailed property info, rent, utilities, pets</div>
+                                </div>
+                            </div>
+                            <div class="checkbox-item" onclick="toggleCheckbox(this, 'accommodation_services')">
+                                <input type="checkbox" id="accommodation_services"> 
+                                <div class="checkbox-content">
+                                    <div class="checkbox-title">Housing Services</div>
+                                    <div class="checkbox-description">Property search, viewings, lease negotiation, utility setup, inventory management</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label><strong>🛂 Immigration & Legal Services:</strong></label>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item" onclick="toggleCheckbox(this, 'immigration_services')">
+                                <input type="checkbox" id="immigration_services"> 
+                                <div class="checkbox-content">
+                                    <div class="checkbox-title">Immigration/Visa Services</div>
+                                    <div class="checkbox-description">Visa applications, work permits, appointments, document requirements, family visas</div>
+                                </div>
+                            </div>
+                            <div class="checkbox-item" onclick="toggleCheckbox(this, 'work_permits')">
+                                <input type="checkbox" id="work_permits"> 
+                                <div class="checkbox-content">
+                                    <div class="checkbox-title">Work Permits</div>
+                                    <div class="checkbox-description">Permit applications, renewals, employer sponsorship, dependent allowances</div>
+                                </div>
+                            </div>
+                            <div class="checkbox-item" onclick="toggleCheckbox(this, 'legal_services')">
+                                <input type="checkbox" id="legal_services"> 
+                                <div class="checkbox-content">
+                                    <div class="checkbox-title">Legal Services</div>
+                                    <div class="checkbox-description">Legal consultations, document review, court proceedings, legal advice</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label><strong>🎓 Education & Family Services:</strong></label>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item" onclick="toggleCheckbox(this, 'schools')">
+                                <input type="checkbox" id="schools"> 
+                                <div class="checkbox-content">
+                                    <div class="checkbox-title">Schools</div>
+                                    <div class="checkbox-description">Educational institutions - admissions, tuition, curriculum, waiting lists</div>
+                                </div>
+                            </div>
+                            <div class="checkbox-item" onclick="toggleCheckbox(this, 'school_services')">
+                                <input type="checkbox" id="school_services"> 
+                                <div class="checkbox-content">
+                                    <div class="checkbox-title">Education Services</div>
+                                    <div class="checkbox-description">School search, application help, enrollment support, uniform purchase, transport</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label><strong>🏦 Financial & Banking Services:</strong></label>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item" onclick="toggleCheckbox(this, 'banking_services')">
+                                <input type="checkbox" id="banking_services"> 
+                                <div class="checkbox-content">
+                                    <div class="checkbox-title">Banking Services</div>
+                                    <div class="checkbox-description">Bank account opening, appointments, required documents, debit cards, credit options</div>
+                                </div>
+                            </div>
+                            <div class="checkbox-item" onclick="toggleCheckbox(this, 'invoices')">
+                                <input type="checkbox" id="invoices"> 
+                                <div class="checkbox-content">
+                                    <div class="checkbox-title">Invoices/Billing</div>
+                                    <div class="checkbox-description">Financial tracking - bills, payments, late fees, line items, payment methods</div>
+                                </div>
+                            </div>
+                            <div class="checkbox-item" onclick="toggleCheckbox(this, 'expenses')">
+                                <input type="checkbox" id="expenses"> 
+                                <div class="checkbox-content">
+                                    <div class="checkbox-title">Expenses</div>
+                                    <div class="checkbox-description">Cost tracking, reimbursements, receipts, vendor payments, case budgets</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label><strong>🚗 Transportation & Utilities:</strong></label>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item" onclick="toggleCheckbox(this, 'transportation_services')">
+                                <input type="checkbox" id="transportation_services"> 
+                                <div class="checkbox-content">
+                                    <div class="checkbox-title">Transportation Services</div>
+                                    <div class="checkbox-description">Airport pickup, car rental, public transport, driving license conversion</div>
+                                </div>
+                            </div>
+                            <div class="checkbox-item" onclick="toggleCheckbox(this, 'utility_services')">
+                                <input type="checkbox" id="utility_services"> 
+                                <div class="checkbox-content">
+                                    <div class="checkbox-title">Utility Services</div>
+                                    <div class="checkbox-description">Electricity, gas, water, internet setup - providers, deposits, connection dates</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label><strong>🏥 Healthcare & Wellbeing:</strong></label>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item" onclick="toggleCheckbox(this, 'healthcare_services')">
+                                <input type="checkbox" id="healthcare_services"> 
+                                <div class="checkbox-content">
+                                    <div class="checkbox-title">Healthcare Services</div>
+                                    <div class="checkbox-description">Doctor registration, insurance setup, health cards, vaccination records</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label><strong>📄 Documents & Administration:</strong></label>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item" onclick="toggleCheckbox(this, 'documents')">
+                                <input type="checkbox" id="documents"> 
+                                <div class="checkbox-content">
+                                    <div class="checkbox-title">Documents</div>
+                                    <div class="checkbox-description">Contracts, permits, certificates - storage, expiry tracking, translation needs</div>
+                                </div>
+                            </div>
+                            <div class="checkbox-item" onclick="toggleCheckbox(this, 'document_services')">
+                                <input type="checkbox" id="document_services"> 
+                                <div class="checkbox-content">
+                                    <div class="checkbox-title">Document Services</div>
+                                    <div class="checkbox-description">Translation, apostille, legal validation, digital storage, expiry reminders</div>
+                                </div>
+                            </div>
+                            <div class="checkbox-item" onclick="toggleCheckbox(this, 'appointments')">
+                                <input type="checkbox" id="appointments"> 
+                                <div class="checkbox-content">
+                                    <div class="checkbox-title">Appointments</div>
+                                    <div class="checkbox-description">Meetings, interviews, viewings - outcomes, follow-ups, confirmations</div>
+                                </div>
+                            </div>
+                            <div class="checkbox-item" onclick="toggleCheckbox(this, 'notifications')">
+                                <input type="checkbox" id="notifications"> 
+                                <div class="checkbox-content">
+                                    <div class="checkbox-title">Notifications</div>
+                                    <div class="checkbox-description">Alerts, reminders, system messages - priorities, expiry dates, read status</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label><strong>📊 Reporting & Analytics:</strong></label>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item" onclick="toggleCheckbox(this, 'service_categories')">
+                                <input type="checkbox" id="service_categories"> 
+                                <div class="checkbox-content">
+                                    <div class="checkbox-title">Service Categories</div>
+                                    <div class="checkbox-description">Service types, duration estimates, skill requirements, vendor counts</div>
+                                </div>
+                            </div>
+                            <div class="checkbox-item" onclick="toggleCheckbox(this, 'compliance_reports')">
+                                <input type="checkbox" id="compliance_reports"> 
+                                <div class="checkbox-content">
+                                    <div class="checkbox-title">Compliance Reports</div>
+                                    <div class="checkbox-description">Regulatory compliance, violations, corrective actions, review schedules</div>
+                                </div>
+                            </div>
+                            <div class="checkbox-item" onclick="toggleCheckbox(this, 'customer_feedback')">
+                                <input type="checkbox" id="customer_feedback"> 
+                                <div class="checkbox-content">
+                                    <div class="checkbox-title">Customer Feedback</div>
+                                    <div class="checkbox-description">Ratings, comments, service evaluations, improvement suggestions</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <label for="customEntities">Any other important things you manage? (one per line)</label>
+                        <textarea id="customEntities" rows="3" placeholder="e.g., Visa Applications&#10;Immigration Tasks&#10;Cost Reports"></textarea>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label>What additional business processes do you handle? (Select all that apply)</label>
+                        <div class="checkbox-group">
+                                                         <div class="checkbox-item" onclick="toggleBusinessProcess(this, 'employer_onboarding')">
+                                 <input type="checkbox" id="employer_onboarding"> 
+                                 <div class="checkbox-content">
+                                     <div class="checkbox-title">Employer/Company Onboarding</div>
+                                     <div class="checkbox-description">Bring new corporate clients onto your platform - setup accounts, contracts, permissions</div>
+                                 </div>
+                             </div>
+                             <div class="checkbox-item" onclick="toggleBusinessProcess(this, 'relocation_requests')">
+                                 <input type="checkbox" id="relocation_requests"> 
+                                 <div class="checkbox-content">
+                                     <div class="checkbox-title">Relocation Request Management</div>
+                                     <div class="checkbox-description">Handle employer requests for employee relocations - capture details, approve, create cases</div>
+                                 </div>
+                             </div>
+                             <div class="checkbox-item" onclick="toggleBusinessProcess(this, 'case_workflow')">
+                                 <input type="checkbox" id="case_workflow"> 
+                                 <div class="checkbox-content">
+                                     <div class="checkbox-title">Case Workflow & Task Management</div>
+                                     <div class="checkbox-description">Structured step-by-step processes - assign tasks, track progress, manage dependencies</div>
+                                 </div>
+                             </div>
+                             <div class="checkbox-item" onclick="toggleBusinessProcess(this, 'document_checklists')">
+                                 <input type="checkbox" id="document_checklists"> 
+                                 <div class="checkbox-content">
+                                     <div class="checkbox-title">Country-Specific Document Checklists</div>
+                                     <div class="checkbox-description">Customized requirements by destination - visa documents, permits, certificates needed</div>
+                                 </div>
+                             </div>
+                             <div class="checkbox-item" onclick="toggleBusinessProcess(this, 'calendar_scheduling')">
+                                 <input type="checkbox" id="calendar_scheduling"> 
+                                 <div class="checkbox-content">
+                                     <div class="checkbox-title">Agent Calendar & Meeting Scheduling</div>
+                                     <div class="checkbox-description">Online booking system - employees schedule consultations with available agents</div>
+                                 </div>
+                             </div>
+                             <div class="checkbox-item" onclick="toggleBusinessProcess(this, 'accommodation_listings')">
+                                 <input type="checkbox" id="accommodation_listings"> 
+                                 <div class="checkbox-content">
+                                     <div class="checkbox-title">Housing & Accommodation Listings</div>
+                                     <div class="checkbox-description">Property database - temp/permanent housing options with photos, prices, availability</div>
+                                 </div>
+                             </div>
+                             <div class="checkbox-item" onclick="toggleBusinessProcess(this, 'flight_tracking')">
+                                 <input type="checkbox" id="flight_tracking"> 
+                                 <div class="checkbox-content">
+                                     <div class="checkbox-title">Flight Information & Arrival Coordination</div>
+                                     <div class="checkbox-description">Track employee arrivals - flight details, airport pickup, arrival logistics</div>
+                                 </div>
+                             </div>
+                             <div class="checkbox-item" onclick="toggleBusinessProcess(this, 'feedback_system')">
+                                 <input type="checkbox" id="feedback_system"> 
+                                 <div class="checkbox-content">
+                                     <div class="checkbox-title">Case Feedback & Satisfaction Tracking</div>
+                                     <div class="checkbox-description">Post-relocation surveys - ratings, testimonials, service improvement insights</div>
+                                 </div>
+                             </div>
+                             <div class="checkbox-item" onclick="toggleBusinessProcess(this, 'multi_role_access')">
+                                 <input type="checkbox" id="multi_role_access"> 
+                                 <div class="checkbox-content">
+                                     <div class="checkbox-title">Multi-Role Access (Employer/Employee/Agent)</div>
+                                     <div class="checkbox-description">Different user types with role-based permissions and personalized dashboards</div>
+                                 </div>
+                             </div>
+                             <div class="checkbox-item" onclick="toggleBusinessProcess(this, 'notification_system')">
+                                 <input type="checkbox" id="notification_system"> 
+                                 <div class="checkbox-content">
+                                     <div class="checkbox-title">Automated Notifications & Updates</div>
+                                     <div class="checkbox-description">Email alerts and in-app messages - task updates, deadline reminders, status changes</div>
+                                 </div>
+                             </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="entity-list">
+                    <h3>📋 Entities Selected:</h3>
+                    <div id="selectedEntities">
+                        <p style="color: #666; text-align: center;">Select entities above to see them here</p>
+                    </div>
+                </div>
+                <div class="button-group">
+                    <button class="btn btn-secondary" onclick="previousStep()">← Back</button>
+                    <button class="btn btn-primary" onclick="nextStep()">Continue Quest 🗂️</button>
+                </div>
+            </div>
+            
+            <!-- Step 4: Property Discovery -->
+            <div class="quest-step hidden" id="step4">
+                <div class="question-card">
+                    <h2 class="question-title">🗂️ Quest 3: Map Entity Properties</h2>
+                    <p class="question-subtitle">
+                        Now let's dive deep! For each entity, we'll discover what information you need to track.
+                    </p>
+                    <p class="question-subtitle">
+                        💡 <strong>Tip:</strong> Select the common properties that make sense for your business, and add any custom ones in the text area below each section.
+                    </p>
+                    <div id="entityPropertyForms">
+                        <!-- Dynamic content will be generated here -->
+                    </div>
+                </div>
+                <div class="button-group">
+                    <button class="btn btn-secondary" onclick="previousStep()">← Back</button>
+                    <button class="btn btn-primary" onclick="nextStep()">Almost Done! 🎉</button>
+                </div>
+            </div>
+            
+            <!-- Step 5: Results -->
+            <div class="quest-step hidden" id="step5">
+                <div class="celebration">
+                    <h2>🎉 Quest Complete!</h2>
+                    <div class="achievement">
+                        <h3>🏆 Requirements Analysis Master!</h3>
+                        <p>You've successfully analyzed your business requirements!</p>
+                    </div>
+                    <div class="result-summary">
+                        <p><strong>Your comprehensive report includes:</strong></p>
+                        <ul>
+                            <li>✅ Current process analysis & pain points</li>
+                            <li>✅ Business requirements & improvement goals</li>
+                            <li>✅ Selected entities & properties</li>
+                            <li>✅ Sample database structure</li>
+                            <li>✅ Implementation recommendations</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="json-output" id="jsonOutput">
+                    <!-- Generated JSON will appear here -->
+                </div>
+                <div class="button-group">
+                    <button class="btn btn-primary" onclick="downloadJson()">📋 Download Complete Report</button>
+                    <button class="btn btn-success" onclick="downloadDatabaseOnly()">🗄️ Download Database Only</button>
+                    <button class="btn btn-secondary" onclick="startOver()">🔄 Start New Quest</button>
+                </div>
+                <div class="info-box">
+                    <p><strong>💡 Next Steps:</strong> Your requirements have been saved as a company-specific file. Share this with your development team to begin implementation!</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        let currentStep = 1;
+        let totalSteps = 5;
+        let questData = {
+            businessName: '',
+            businessType: '',
+            currentProcesses: [],
+            painPoints: [],
+            improvementGoals: [],
+            entities: [],
+            properties: {}
+        };
+        let xp = 0;
+        
+        function updateProgress() {
+            const progress = ((currentStep - 1) / (totalSteps - 1)) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+            document.getElementById('currentStep').textContent = currentStep;
+            updateStats();
+        }
+        
+        function updateStats() {
+            document.getElementById('entitiesCount').textContent = questData.entities.length;
+            const totalProperties = Object.values(questData.properties).reduce((sum, props) => sum + props.length, 0);
+            document.getElementById('propertiesCount').textContent = totalProperties;
+            document.getElementById('xpPoints').textContent = xp;
+        }
+        
+        function gainXP(points) {
+            xp += points;
+            updateStats();
+        }
+        
+        function nextStep() {
+            if (currentStep === 1) {
+                questData.businessName = document.getElementById('businessName').value;
+                questData.businessType = document.getElementById('businessType').value;
+                if (!questData.businessName || !questData.businessType || questData.currentProcesses.length === 0) {
+                    alert('Please fill in all fields and select your current processes to continue!');
+                    return;
+                }
+                generatePainPointsAndGoals();
+                gainXP(50);
+            } else if (currentStep === 2) {
+                if (questData.painPoints.length === 0 && questData.improvementGoals.length === 0) {
+                    alert('Please select at least one challenge or improvement goal to continue!');
+                    return;
+                }
+                gainXP(75);
+            } else if (currentStep === 3) {
+                collectEntities();
+                generatePropertyForms();
+                gainXP(100);
+            } else if (currentStep === 4) {
+                collectProperties();
+                generateResults();
+                gainXP(200);
+            }
+            
+            if (currentStep < totalSteps) {
+                document.getElementById('step' + currentStep).classList.add('hidden');
+                currentStep++;
+                document.getElementById('step' + currentStep).classList.remove('hidden');
+                updateProgress();
+            }
+        }
+        
+        function previousStep() {
+            if (currentStep > 1) {
+                document.getElementById('step' + currentStep).classList.add('hidden');
+                currentStep--;
+                document.getElementById('step' + currentStep).classList.remove('hidden');
+                updateProgress();
+            }
+        }
+        
+        function toggleCheckbox(element, entityName) {
+            const checkbox = element.querySelector('input');
+            checkbox.checked = !checkbox.checked;
+            element.classList.toggle('selected', checkbox.checked);
+            
+            if (checkbox.checked) {
+                if (!questData.entities.includes(entityName)) {
+                    questData.entities.push(entityName);
+                    gainXP(20);
+                }
+            } else {
+                questData.entities = questData.entities.filter(e => e !== entityName);
+            }
+            
+            updateSelectedEntities();
+        }
+        
+        function toggleBusinessProcess(element, processName) {
+            const checkbox = element.querySelector('input');
+            checkbox.checked = !checkbox.checked;
+            element.classList.toggle('selected', checkbox.checked);
+            
+            if (checkbox.checked) {
+                if (!questData.businessProcesses) {
+                    questData.businessProcesses = [];
+                }
+                if (!questData.businessProcesses.includes(processName)) {
+                    questData.businessProcesses.push(processName);
+                    gainXP(15);
+                }
+            } else {
+                if (questData.businessProcesses) {
+                    questData.businessProcesses = questData.businessProcesses.filter(p => p !== processName);
+                }
+            }
+        }
+        
+        function updateSelectedEntities() {
+            const container = document.getElementById('selectedEntities');
+            if (questData.entities.length === 0) {
+                container.innerHTML = '<p style="color: #666; text-align: center;">Select entities above to see them here</p>';
+                return;
+            }
+            
+            container.innerHTML = questData.entities.map(entity => `
+                <div class="entity-item">
+                    <div class="entity-name">${entity.charAt(0).toUpperCase() + entity.slice(1)}</div>
+                    <div class="badge">${entity}</div>
+                </div>
+            `).join('');
+        }
+        
+        function toggleCurrentProcess(element, processName) {
+            const checkbox = element.querySelector('input');
+            checkbox.checked = !checkbox.checked;
+            element.classList.toggle('selected', checkbox.checked);
+            
+            if (checkbox.checked) {
+                if (!questData.currentProcesses.includes(processName)) {
+                    questData.currentProcesses.push(processName);
+                    gainXP(15);
+                }
+            } else {
+                questData.currentProcesses = questData.currentProcesses.filter(p => p !== processName);
+            }
+        }
+        
+        function togglePainPoint(element, painPointName) {
+            const checkbox = element.querySelector('input');
+            checkbox.checked = !checkbox.checked;
+            element.classList.toggle('selected', checkbox.checked);
+            
+            if (checkbox.checked) {
+                if (!questData.painPoints.includes(painPointName)) {
+                    questData.painPoints.push(painPointName);
+                    gainXP(10);
+                }
+            } else {
+                questData.painPoints = questData.painPoints.filter(p => p !== painPointName);
+            }
+        }
+        
+        function toggleImprovementGoal(element, goalName) {
+            const checkbox = element.querySelector('input');
+            checkbox.checked = !checkbox.checked;
+            element.classList.toggle('selected', checkbox.checked);
+            
+            if (checkbox.checked) {
+                if (!questData.improvementGoals.includes(goalName)) {
+                    questData.improvementGoals.push(goalName);
+                    gainXP(10);
+                }
+            } else {
+                questData.improvementGoals = questData.improvementGoals.filter(g => g !== goalName);
+            }
+        }
+        
+        function generatePainPointsAndGoals() {
+            const isManual = questData.currentProcesses.includes('manual_email') || 
+                           questData.currentProcesses.includes('office365') || 
+                           questData.currentProcesses.includes('google_workspace') ||
+                           questData.currentProcesses.includes('paper_based');
+            
+            const painPointsContainer = document.getElementById('painPointsCheckboxes');
+            const goalsContainer = document.getElementById('improvementGoalsCheckboxes');
+            
+            let painPoints, goals;
+            
+            if (isManual) {
+                // For manual processes
+                painPoints = [
+                    { id: 'email_chains', title: 'Long Email Chains', desc: 'Hard to track status and find information in endless email threads' },
+                    { id: 'manual_updates', title: 'Manual Status Updates', desc: 'Spending time on repetitive updates instead of high-value work' },
+                    { id: 'lost_information', title: 'Lost Information', desc: 'Documents or details getting lost between emails and files' },
+                    { id: 'no_visibility', title: 'No Client Visibility', desc: 'Clients and employees asking for status updates constantly' },
+                    { id: 'repeat_work', title: 'Repeating Same Work', desc: 'Similar onboarding and communication steps for every case' },
+                    { id: 'file_management', title: 'File Management Chaos', desc: 'Documents scattered across email, SharePoint, local drives' },
+                    { id: 'no_reminders', title: 'Missing Deadlines', desc: 'No automatic reminders for important dates and tasks' },
+                    { id: 'manual_reporting', title: 'Time-Consuming Reporting', desc: 'Manually creating reports and status summaries' }
+                ];
+                
+                goals = [
+                    { id: 'automate_updates', title: 'Automate Status Updates', desc: 'Automatic notifications when tasks are completed' },
+                    { id: 'central_dashboard', title: 'Central Dashboard', desc: 'One place to see all cases and their current status' },
+                    { id: 'client_portal', title: 'Client Self-Service', desc: 'Let clients and employees check their own status' },
+                    { id: 'document_management', title: 'Better File Organization', desc: 'Centralized, searchable document storage' },
+                    { id: 'workflow_templates', title: 'Standardized Workflows', desc: 'Consistent process templates for different relocation types' },
+                    { id: 'automated_reminders', title: 'Automatic Reminders', desc: 'Never miss deadlines with smart notifications' },
+                    { id: 'quick_reporting', title: 'Instant Reports', desc: 'Generate reports and summaries with one click' },
+                    { id: 'mobile_access', title: 'Mobile Access', desc: 'Manage cases on the go from anywhere' }
+                ];
+            } else {
+                // For existing software users
+                painPoints = [
+                    { id: 'integration_issues', title: 'System Integration Problems', desc: 'Different tools not talking to each other' },
+                    { id: 'complex_workflows', title: 'Overly Complex Workflows', desc: 'Too many steps and approvals slowing things down' },
+                    { id: 'poor_reporting', title: 'Limited Reporting', desc: 'Hard to get insights and analytics from current system' },
+                    { id: 'user_adoption', title: 'Low User Adoption', desc: 'Team members not fully using the system' },
+                    { id: 'customization_limits', title: 'Can\'t Customize', desc: 'System doesn\'t fit your specific business needs' },
+                    { id: 'expensive_costs', title: 'High Costs', desc: 'Current solution is expensive for what you get' }
+                ];
+                
+                goals = [
+                    { id: 'better_integration', title: 'Seamless Integrations', desc: 'Connect all your tools and systems' },
+                    { id: 'simplified_workflows', title: 'Streamlined Processes', desc: 'Simpler, more efficient workflows' },
+                    { id: 'advanced_analytics', title: 'Better Analytics', desc: 'Detailed insights and performance metrics' },
+                    { id: 'modern_interface', title: 'Modern User Experience', desc: 'Intuitive interface that people actually want to use' },
+                    { id: 'flexible_customization', title: 'Full Customization', desc: 'Adapt the system to your exact needs' },
+                    { id: 'cost_optimization', title: 'Cost Efficiency', desc: 'Better value for money and lower total cost' }
+                ];
+            }
+            
+            painPointsContainer.innerHTML = painPoints.map(pain => `
+                <div class="checkbox-item" onclick="togglePainPoint(this, '${pain.id}')">
+                    <input type="checkbox" id="${pain.id}"> 
+                    <div class="checkbox-content">
+                        <div class="checkbox-title">${pain.title}</div>
+                        <div class="checkbox-description">${pain.desc}</div>
+                    </div>
+                </div>
+            `).join('');
+            
+            goalsContainer.innerHTML = goals.map(goal => `
+                <div class="checkbox-item" onclick="toggleImprovementGoal(this, '${goal.id}')">
+                    <input type="checkbox" id="${goal.id}"> 
+                    <div class="checkbox-content">
+                        <div class="checkbox-title">${goal.title}</div>
+                        <div class="checkbox-description">${goal.desc}</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        function collectEntities() {
+            const customEntities = document.getElementById('customEntities').value
+                .split('\n')
+                .map(e => e.trim())
+                .filter(e => e.length > 0)
+                .map(e => e.toLowerCase().replace(/\s+/g, '_'));
+            
+            questData.entities = [...questData.entities, ...customEntities];
+        }
+        
+        function generatePropertyForms() {
+            const container = document.getElementById('entityPropertyForms');
+            
+            const commonProperties = {
+                // People & Organizations
+                employers: ['companyName', 'industry', 'contactPersonFirstName', 'contactPersonLastName', 'contactPersonEmail', 'contactPersonPhone', 'companyAddress', 'country', 'employeeCount', 'contractType', 'paymentTerms', 'preferredServices', 'budget', 'hrContactInfo', 'companyPolicy', 'relocationType'],
+                employees: ['firstName', 'lastName', 'email', 'phone', 'nationality', 'dateOfBirth', 'passportNumber', 'passportExpiryDate', 'workPermitStatus', 'visaType', 'maritalStatus', 'spouseFirstName', 'spouseLastName', 'numberOfChildren', 'emergencyContactName', 'emergencyContactPhone', 'currentAddress', 'destinationCountry', 'jobTitle', 'startDate', 'salaryRange', 'languageSkills', 'dietaryRestrictions', 'medicalConditions', 'petOwnership'],
+                family_members: ['firstName', 'lastName', 'relationshipToEmployee', 'dateOfBirth', 'nationality', 'passportNumber', 'passportExpiryDate', 'visaRequired', 'visaStatus', 'schoolAge', 'educationLevel', 'specialNeeds', 'medicalConditions', 'languageSkills', 'dietaryRestrictions'],
+                vendors: ['companyName', 'serviceType', 'contactPersonFirstName', 'contactPersonLastName', 'contactPersonEmail', 'phoneNumber', 'address', 'servingCountries', 'serviceCategories', 'rating', 'contractTerms', 'paymentTerms', 'availabilityHours', 'languages', 'certifications', 'insuranceInfo', 'pricingStructure'],
+                
+                // Core Entities
+                cases: ['caseNumber', 'status', 'priority', 'startDate', 'expectedEndDate', 'actualEndDate', 'budget', 'actualCost', 'assignedAgent', 'employeeId', 'employerId', 'currentStep', 'completionPercentage', 'relocationType', 'originCountry', 'destinationCountry', 'familySize', 'petRelocation', 'urgencyLevel'],
+                companies: ['name', 'industry', 'contactPersonFirstName', 'contactPersonLastName', 'contactPersonEmail', 'contactPersonPhone', 'address', 'country', 'employeeCount', 'contractType', 'accountManager', 'contractStartDate', 'contractEndDate', 'serviceLevel', 'billingAddress', 'taxId'],
+                
+                // Accommodation Services
+                accommodations: ['type', 'name', 'address', 'city', 'country', 'rent', 'currency', 'startDate', 'endDate', 'provider', 'bedrooms', 'bathrooms', 'furnished', 'petFriendly', 'utilities', 'deposit', 'nearTransport', 'internetIncluded', 'parkingAvailable', 'photos', 'floorPlan'],
+                accommodation_services: ['serviceType', 'searchCriteria', 'viewingScheduled', 'contractNegotiation', 'depositHandling', 'utilitySetup', 'inventoryCheck', 'keyHandover', 'ongoingSupport', 'emergencyContact'],
+                
+                // Document Services
+                documents: ['type', 'filename', 'uploadedBy', 'status', 'fileSize', 'expiryDate', 'approvedBy', 'category', 'relatedCaseId', 'isOriginal', 'translationRequired', 'apostilleRequired', 'country'],
+                document_services: ['documentType', 'translationServices', 'apostilleServices', 'legalValidation', 'digitalStorage', 'expiryTracking', 'reminderSettings', 'backupCopies'],
+                
+                // Immigration Services  
+                immigration_services: ['visaType', 'applicationStatus', 'submissionDate', 'expectedDecision', 'requiredDocuments', 'fees', 'appointmentScheduling', 'followUpRequired', 'rejectionReason', 'appealProcess', 'workPermitIncluded', 'familyVisasIncluded'],
+                work_permits: ['permitType', 'applicationDate', 'approvalDate', 'expiryDate', 'renewalRequired', 'employerSponsorship', 'restrictions', 'dependentsAllowed'],
+                
+                // Banking Services
+                banking_services: ['bankName', 'accountType', 'applicationStatus', 'appointmentDate', 'requiredDocuments', 'initialDeposit', 'monthlyFees', 'onlineBankingSetup', 'debitCardIssue', 'creditOptions'],
+                
+                // Education Services
+                schools: ['name', 'type', 'address', 'ageRange', 'language', 'tuitionFee', 'currency', 'curriculum', 'applicationDeadline', 'admissionRequirements', 'waitingList', 'extracurriculars', 'schoolHours', 'uniformRequired'],
+                school_services: ['schoolSearch', 'applicationAssistance', 'interviewPreparation', 'enrollmentSupport', 'uniformPurchase', 'transportArrangement', 'afterSchoolCare'],
+                
+                // Utility Services
+                utility_services: ['utilityType', 'provider', 'connectionDate', 'accountSetup', 'depositRequired', 'monthlyEstimate', 'contractLength', 'disconnectionNotice', 'emergencyContact'],
+                
+                // Transportation Services
+                transportation: ['serviceType', 'from', 'to', 'date', 'time', 'cost', 'currency', 'bookingReference', 'driverInfo', 'vehicleInfo', 'passengerCount', 'luggageAllowance'],
+                transportation_services: ['airportPickup', 'carRental', 'publicTransportPasses', 'drivingLicenseConversion', 'vehicleRegistration', 'insuranceSetup'],
+                
+                // Healthcare Services
+                healthcare_services: ['doctorRegistration', 'insuranceSetup', 'healthCardApplication', 'vaccinationRecords', 'prescriptionTransfer', 'emergencyNumbers', 'hospitalLocations'],
+                
+                // Legal Services
+                legal_services: ['serviceType', 'lawyerName', 'consultationDate', 'hourlyRate', 'retainerFee', 'caseStatus', 'documentsRequired', 'courtDates', 'legalAdvice'],
+                
+                // Administrative Support
+                appointments: ['type', 'title', 'date', 'time', 'location', 'attendees', 'status', 'confirmationNumber', 'reminderSent', 'outcome', 'followUpRequired'],
+                notifications: ['toUserId', 'type', 'title', 'message', 'status', 'priority', 'actionRequired', 'actionUrl', 'sentDate', 'readDate', 'expiryDate'],
+                tasks: ['name', 'description', 'priority', 'estimatedHours', 'estimatedDays', 'requiredDocuments', 'assignableRoles', 'dependencies', 'dueDate', 'completionDate', 'notes'],
+                
+                // Service Packages
+                packages: ['name', 'description', 'price', 'currency', 'includedServices', 'duration', 'maxEmployees', 'maxFamilyMembers', 'isPopular', 'customizable', 'addOnServices', 'restrictions'],
+                service_categories: ['name', 'description', 'essentialServices', 'optionalServices', 'averageDuration', 'skillsRequired', 'certificationNeeded', 'vendorCount'],
+                
+                // Financial
+                invoices: ['invoiceNumber', 'clientId', 'amount', 'currency', 'dueDate', 'status', 'paymentMethod', 'taxAmount', 'lineItems', 'paymentDate', 'lateFees'],
+                expenses: ['description', 'amount', 'currency', 'category', 'date', 'approvedBy', 'receiptAttached', 'reimbursable', 'vendorInfo', 'caseId'],
+                
+                // Reporting & Analytics
+                compliance_reports: ['reportType', 'generatedDate', 'coveringPeriod', 'complianceStatus', 'violations', 'correctiveActions', 'nextReviewDate'],
+                customer_feedback: ['caseId', 'rating', 'comments', 'serviceAreas', 'improvementSuggestions', 'wouldRecommend', 'responseDate', 'followUpRequired']
+            };
+            
+            container.innerHTML = questData.entities.map(entity => `
+                <div class="question-card">
+                    <h3>📝 ${entity.charAt(0).toUpperCase() + entity.slice(1)}</h3>
+                    <p>What information do you need to track for each ${entity.slice(0, -1)}?</p>
+                    <div class="input-group">
+                        <label>Common properties for ${entity}:</label>
+                        <div class="checkbox-group">
+                            ${(commonProperties[entity] || []).map(prop => `
+                                <div class="checkbox-item" onclick="toggleProperty(this, '${entity}', '${prop}')">
+                                    <input type="checkbox" id="${entity}_${prop}"> ${prop}
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <label for="${entity}_custom">Additional properties (one per line):</label>
+                        <textarea id="${entity}_custom" rows="3" placeholder="e.g., specialRequirements&#10;emergencyContact&#10;budget"></textarea>
+                    </div>
+                </div>
+            `).join('');
+            
+            // Initialize properties object
+            questData.entities.forEach(entity => {
+                questData.properties[entity] = [];
+            });
+        }
+        
+        function toggleProperty(element, entity, property) {
+            const checkbox = element.querySelector('input');
+            checkbox.checked = !checkbox.checked;
+            element.classList.toggle('selected', checkbox.checked);
+            
+            if (checkbox.checked) {
+                if (!questData.properties[entity].includes(property)) {
+                    questData.properties[entity].push(property);
+                    gainXP(10);
+                }
+            } else {
+                questData.properties[entity] = questData.properties[entity].filter(p => p !== property);
+            }
+        }
+        
+        function collectProperties() {
+            questData.entities.forEach(entity => {
+                const customProps = document.getElementById(`${entity}_custom`).value
+                    .split('\n')
+                    .map(p => p.trim())
+                    .filter(p => p.length > 0);
+                
+                questData.properties[entity] = [...questData.properties[entity], ...customProps];
+            });
+        }
+        
+        function generateResults() {
+            const timestamp = new Date().toISOString();
+            const companySlug = questData.businessName.toLowerCase().replace(/[^a-z0-9]/g, '_');
+            
+            // Create comprehensive customer report
+            const customerReport = {
+                customerInfo: {
+                    companyName: questData.businessName,
+                    businessType: questData.businessType,
+                    analysisDate: timestamp,
+                    questCompletionXP: xp
+                },
+                currentProcessAnalysis: {
+                    processesUsed: questData.currentProcesses || [],
+                    processMaturity: getProcessMaturity(),
+                    painPoints: questData.painPoints || [],
+                    improvementGoals: questData.improvementGoals || []
+                },
+                requirementsAnalysis: {
+                    selectedEntities: questData.entities,
+                    totalEntities: questData.entities.length,
+                    entityDetails: questData.entities.reduce((obj, entity) => {
+                        obj[entity] = {
+                            properties: questData.properties[entity] || [],
+                            propertyCount: (questData.properties[entity] || []).length
+                        };
+                        return obj;
+                    }, {})
+                },
+                generatedDatabase: {}
+            };
+            
+            // Generate sample database structure
+            questData.entities.forEach(entity => {
+                customerReport.generatedDatabase[entity] = [{
+                    id: 1,
+                    ...questData.properties[entity].reduce((obj, prop) => {
+                        obj[prop] = getSampleValue(prop);
+                        return obj;
+                    }, {}),
+                    createdAt: timestamp,
+                    updatedAt: timestamp
+                }];
+            });
+            
+            // Store for download
+            window.customerReport = customerReport;
+            window.companySlug = companySlug;
+            
+            // Display formatted JSON
+            document.getElementById('jsonOutput').textContent = JSON.stringify(customerReport, null, 2);
+        }
+        
+        function getProcessMaturity() {
+            const manualProcesses = ['manual_email', 'office365', 'google_workspace', 'paper_based'];
+            const hasManual = questData.currentProcesses?.some(p => manualProcesses.includes(p));
+            const hasAdvanced = questData.currentProcesses?.some(p => ['existing_software', 'crm_system'].includes(p));
+            
+            if (hasAdvanced) return 'advanced';
+            if (hasManual) return 'manual';
+            return 'unknown';
+        }
+        
+        function getSampleValue(property) {
+            const samples = {
+                firstName: 'John',
+                lastName: 'Doe',
+                contactPersonFirstName: 'Sarah',
+                contactPersonLastName: 'Johnson', 
+                spouseFirstName: 'Jane',
+                spouseLastName: 'Doe',
+                emergencyContactName: 'Michael Smith',
+                emergencyContactPhone: '+45 87 65 43 21',
+                companyName: 'TechCorp Solutions',
+                email: 'john.doe@example.com',
+                contactPersonEmail: 'sarah.johnson@techcorp.com',
+                phone: '+45 12 34 56 78',
+                contactPersonPhone: '+45 33 44 55 66',
+                nationality: 'Indian',
+                dateOfBirth: '1990-05-14',
+                status: 'active',
+                startDate: '2024-06-15',
+                endDate: '2024-12-15',
+                country: 'Denmark',
+                city: 'Copenhagen',
+                address: 'Example Street 123',
+                companyAddress: 'Business Park 456, Copenhagen',
+                currentAddress: 'Current Street 789, Mumbai',
+                destinationCountry: 'Denmark',
+                type: 'temporary',
+                priority: 'high',
+                industry: 'Technology',
+                jobTitle: 'Software Engineer',
+                relationshipToEmployee: 'spouse',
+                serviceType: 'accommodation',
+                visaType: 'work_visa',
+                workPermitStatus: 'approved',
+                maritalStatus: 'married',
+                numberOfChildren: '2',
+                budget: '50000',
+                salaryRange: '75000-85000',
+                name: 'TechCorp Solutions',
+                schoolAge: 'yes',
+                educationLevel: 'primary',
+                accountManager: 'Lisa Anderson',
+                assignedAgent: 'Mike Thompson'
+            };
+            
+            return samples[property] || `sample_${property}`;
+        }
+        
+        function downloadJson() {
+            const jsonContent = document.getElementById('jsonOutput').textContent;
+            const blob = new Blob([jsonContent], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `${window.companySlug || 'customer'}_requirements.json`;
+            a.click();
+        }
+        
+        function downloadDatabaseOnly() {
+            const databaseOnly = window.customerReport?.generatedDatabase || {};
+            const jsonContent = JSON.stringify(databaseOnly, null, 2);
+            const blob = new Blob([jsonContent], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `${window.companySlug || 'customer'}_database.json`;
+            a.click();
+        }
+        
+        function startOver() {
+            currentStep = 1;
+            xp = 0;
+            questData = {
+                businessName: '',
+                businessType: '',
+                currentProcesses: [],
+                painPoints: [],
+                improvementGoals: [],
+                entities: [],
+                properties: {}
+            };
+            
+            document.querySelectorAll('.quest-step').forEach(step => step.classList.add('hidden'));
+            document.getElementById('step1').classList.remove('hidden');
+            document.getElementById('businessName').value = '';
+            document.getElementById('businessType').value = '';
+            updateProgress();
+        }
+        
+        // Initialize
+        updateProgress();
+    </script>
+</body>
+</html> 
