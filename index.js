@@ -120,6 +120,150 @@ function removeItemById(collection, id) {
  * API Routes
  */
 
+// Serve API Documentation
+app.get('/docs', async (req, res) => {
+  try {
+    const docPath = path.join(__dirname, 'API_DOCUMENTATION.md');
+    const docContent = await fs.readFile(docPath, 'utf8');
+    
+    // Convert markdown to basic HTML
+    const htmlContent = `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PILLAR JSON Server API Documentation</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f8f9fa;
+        }
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1, h2, h3 { color: #2c3e50; }
+        h1 { border-bottom: 3px solid #3498db; padding-bottom: 10px; }
+        h2 { border-bottom: 2px solid #ecf0f1; padding-bottom: 8px; margin-top: 30px; }
+        code {
+            background: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Monaco', 'Consolas', monospace;
+        }
+        pre {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 20px;
+            border-radius: 6px;
+            overflow-x: auto;
+            border-left: 4px solid #3498db;
+        }
+        pre code {
+            background: none;
+            color: inherit;
+            padding: 0;
+        }
+        .endpoint {
+            background: #e8f4fd;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 10px 0;
+            border-left: 4px solid #3498db;
+        }
+        .method-get { border-left-color: #27ae60; }
+        .method-post { border-left-color: #f39c12; }
+        .method-put { border-left-color: #e74c3c; }
+        .method-delete { border-left-color: #95a5a6; }
+        ul { padding-left: 20px; }
+        li { margin: 5px 0; }
+        .nav {
+            background: #34495e;
+            color: white;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 30px;
+        }
+        .nav a {
+            color: #3498db;
+            text-decoration: none;
+            margin-right: 20px;
+        }
+        .nav a:hover { text-decoration: underline; }
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            background: #ecf0f1;
+            border-radius: 6px;
+            color: #7f8c8d;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="nav">
+            <strong>🚀 PILLAR JSON Server</strong> | 
+            <a href="/">Home</a>
+            <a href="/collections">Collections</a>
+            <a href="/employees">Employees</a>
+            <a href="/cases">Cases</a>
+            <a href="/docs">Documentation</a>
+        </div>
+        <div class="content">
+            ${docContent.replace(/```(\w+)?\n([\s\S]*?)```/g, '<pre><code>$2</code></pre>')
+                        .replace(/`([^`]+)`/g, '<code>$1</code>')
+                        .replace(/^### (.+)$/gm, '<h3>$1</h3>')
+                        .replace(/^## (.+)$/gm, '<h2>$1</h2>')
+                        .replace(/^# (.+)$/gm, '<h1>$1</h1>')
+                        .replace(/^\- (.+)$/gm, '<li>$1</li>')
+                        .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+                        .replace(/\*(.+?)\*/g, '<em>$1</em>')
+                        .replace(/\n\n/g, '</p><p>')
+                        .replace(/^(?!<[h|l|p|d])/gm, '<p>')
+                        .replace(/(<\/[h|p]\d?>)\n<p>$/gm, '$1')
+            }
+        </div>
+        <div class="footer">
+            <p>🛠️ PILLAR JSON Server running on port ${PORT}</p>
+            <p>Access live data: <a href="/collections">View Collections</a></p>
+        </div>
+    </div>
+</body>
+</html>`;
+    
+    res.set('Content-Type', 'text/html');
+    res.send(htmlContent);
+  } catch (error) {
+    console.error('Error serving documentation:', error);
+    res.status(500).json({
+      error: 'Internal server error',
+      message: 'Failed to load documentation'
+    });
+  }
+});
+
+// Get entire database
+app.get('/db', async (req, res) => {
+  try {
+    const db = await readDatabase();
+    res.json(db);
+  } catch (error) {
+    console.error('Error fetching entire database:', error);
+    res.status(500).json({ 
+      error: 'Internal server error',
+      message: 'Failed to fetch database'
+    });
+  }
+});
+
 // Get all available collections
 app.get('/collections', async (req, res) => {
   try {
